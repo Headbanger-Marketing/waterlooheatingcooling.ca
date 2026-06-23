@@ -126,6 +126,18 @@ def feature_item(ic, h, p):
     return f'<li><span class="fi">{icon(ic,size=22)}</span><div><h4>{h}</h4><p>{p}</p></div></li>'
 
 # ============================================================ SERVICE PAGE
+# --- recovered WP photos (added in remediation) ---
+SVC_PHOTO_FALLBACK = ("wp/London-Ontario-HVAC-technician.png", "Waterloo Heating & Cooling HVAC technician in service")
+SVC_PHOTO = {
+ "furnace-repair": ("wp/London-Ontario-HVAC-technician.png", "Furnace repair service"),
+ "ac-repair": ("wp/London-Ontario-HVAC-technician.png", "Air conditioner repair service"),
+ "ductless-ac-installation": ("wp/London-Ontario-HVAC-technician.png", "Ductless mini-split installation"),
+ "heat-pump-repair-installation": ("wp/London-Ontario-HVAC-technician.png", "Heat pump repair and installation"),
+ "fireplace-installation": ("wp/London-Ontario-HVAC-technician.png", "Fireplace installation"),
+ "thermostat-repair-replacement": ("wp/London-Ontario-HVAC-technician.png", "Thermostat replacement"),
+ "duct-cleaning": ("wp/London-Ontario-HVAC-technician.png", "Duct cleaning service"),
+}
+
 def build_service(slug, data):
     url = f"/services/{slug}/"
     nav_label = next(s["nav"] for s in SERVICES if s["slug"]==slug)
@@ -139,6 +151,8 @@ def build_service(slug, data):
     feats = "".join(feature_item(*f) for f in data["features"])
     revs = "".join(review_card(*REVIEW_POOL[i]) for i in data["rev"])
     breadcrumb_items = [("Home","/"),("Services","/services/"),(nav_label, url)]
+    _ps, _pa = SVC_PHOTO.get(slug, SVC_PHOTO_FALLBACK)
+    svc_photo = f'<img class="svc-photo" src="/assets/img/{_ps}" alt="{_pa} in {CITY}, {REGION}" width="720" height="480" loading="lazy" decoding="async">'
 
     nav_plain = nav_label.replace("&amp;", "&")
     title = f"{nav_plain} in {CITY}, ON | {SITE_NAME}"
@@ -165,6 +179,8 @@ def build_service(slug, data):
     </div>
   </div>
 </section>
+
+<section class="section" style="padding-bottom:0"><div class="container">{svc_photo}</div></section>
 
 <section class="section">
   <div class="container">
@@ -310,17 +326,10 @@ def build_home():
         </div>
       </div>
       <div class="split__media reveal d1">
-        <div class="media-panel">
-          <div class="media-panel__row">
-            <div class="media-chip warm"><span class="ic">{icon('flame',size=24)}</span><b>Heating</b><span>Furnaces, heat pumps &amp; fireplaces</span></div>
-            <div class="media-chip cool"><span class="ic">{icon('snowflake',size=24)}</span><b>Cooling</b><span>Central air &amp; ductless systems</span></div>
-            <div class="media-chip cool"><span class="ic">{icon('droplets',size=24)}</span><b>Air Quality</b><span>Duct cleaning &amp; ventilation</span></div>
-            <div class="media-chip warm"><span class="ic">{icon('gauge',size=24)}</span><b>Controls</b><span>Smart &amp; programmable thermostats</span></div>
-            <div class="media-chip media-chip--wide cool" style="display:flex;align-items:center;gap:14px">
-              <span class="ic" style="margin:0">{icon('headset',size=24)}</span>
-              <div><b>Real local technicians, on call 24/7</b><span>Serving Waterloo &amp; Waterloo Region, every day of the year</span></div>
-            </div>
-          </div>
+        <img class="media-photo" src="/assets/img/wp/London-Ontario-HVAC-technician.png" alt="Waterloo Heating & Cooling HVAC technician servicing a system" width="640" height="640" loading="lazy" decoding="async">
+        <div class="about-badge" style="display:flex;align-items:center;gap:14px;margin-top:16px">
+          <img class="badge-img" src="/assets/img/wp/quality-guarantee.png" alt="Satisfaction guarantee" width="72" height="72" loading="lazy" decoding="async">
+          <p style="margin:0;color:var(--muted)">Every job is backed by our 100% satisfaction guarantee.</p>
         </div>
       </div>
     </div>
