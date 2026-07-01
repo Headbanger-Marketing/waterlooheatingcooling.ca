@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """Content + page assembly for waterlooheatingcooling.ca. Run: python3 build_pages.py"""
 from build import *  # noqa
+SITE_NAME_T = SITE_NAME.replace("&", "&amp;")  # brand for <title> (renders as &)
 
 # ============================================================ SERVICE DETAILS
 SVC = {
@@ -184,8 +185,8 @@ def build_service(slug, data):
     _ps, _pa = SVC_PHOTO.get(slug, SVC_PHOTO_FALLBACK)
     svc_photo = f'<img class="svc-photo" src="/assets/img/{_ps}" alt="{_pa} in {CITY}, {REGION}" width="720" height="480" loading="lazy" decoding="async">'
 
-    nav_plain = nav_label.replace("&amp;", "&")
-    title = f"{nav_plain} in {CITY}, ON | {SITE_NAME}"
+    nav_plain = nav_label  # keep &amp; (valid in <title>, renders as &)
+    title = f"{nav_plain} in {CITY}, ON | {SITE_NAME_T}"
     if len(title) > 60:
         title = f"{nav_plain} | {CITY}, ON"
 
@@ -305,7 +306,7 @@ def build_home():
     blog_cards = build_blog_cards(BLOG)
 
     out = head(
-      title=f"{SITE_NAME} | HVAC Company in {CITY}, ON",
+      title=f"{SITE_NAME_T} | HVAC Company in {CITY}, ON",
       desc=f"Waterloo Heating & Cooling provides honest, efficient, dependable HVAC service in {CITY}, Ontario, furnace & AC repair, heat pumps & more. Call {PHONE_DISPLAY} for a free quote.",
       path="/",
       schema_blocks=[schema_localbusiness(), schema_faq(HOME_FAQ)])
@@ -316,7 +317,7 @@ def build_home():
   <div class="container">
     <div class="hero__copy reveal">
       <span class="eyebrow on-dark">{CITY}'s Trusted HVAC Experts</span>
-      <h1>Waterloo Heating & Cooling, Expert Heating &amp; Cooling Repair in <span class="accent">{CITY}, ON</span></h1>
+      <h1>Expert Heating &amp; Cooling Repair in <span class="accent">{CITY}, ON</span></h1>
       <p class="hero__sub">At {SITE_NAME}, we treat your home like our own. Serving {CITY}, Ontario and {COUNTY}, we deliver honest, efficient, and dependable HVAC solutions for year-round comfort.</p>
       <div class="hero__cta">
         <a class="btn btn-primary btn-lg" href="#quote">Get a Free Quote</a>
@@ -446,7 +447,7 @@ def build_services_index():
         <a class="svc-card__link" href="/services/{s["slug"]}/">Learn more {icon('arrow-right',size=17)}</a>
       </article>''' for s in SERVICES)
     out = head(
-      title=f"HVAC Services in {CITY}, ON | {SITE_NAME}",
+      title=f"HVAC Services in {CITY}, ON | {SITE_NAME_T}",
       desc=f"Full-service heating & cooling in Waterloo, Ontario, furnace & AC repair, heat pumps, ductless AC, thermostats & duct cleaning. Free quotes.",
       path="/services/",
       schema_blocks=[schema_localbusiness(), schema_breadcrumb([("Home","/"),("Services","/services/")])])
@@ -483,7 +484,7 @@ def build_services_index():
 # ============================================================ ABOUT
 def build_about():
     out = head(
-      title=f"About Us | {SITE_NAME}",
+      title=f"About Us | {SITE_NAME_T}",
       desc=f"Waterloo Heating & Cooling is a local, family-run HVAC company serving Waterloo, Ontario with honest, reliable heating and cooling care. Meet the team.",
       path="/about/",
       schema_blocks=[schema_localbusiness(), schema_breadcrumb([("Home","/"),("About","/about/")])])
@@ -551,7 +552,7 @@ def build_about():
 # ============================================================ CONTACT
 def build_contact():
     out = head(
-      title=f"Contact Us | {SITE_NAME}",
+      title=f"Contact Us | {SITE_NAME_T}",
       desc=f"Contact Waterloo Heating & Cooling for fast, friendly HVAC service in Waterloo, Ontario. Call {PHONE_DISPLAY} or request a free quote online. Open 24/7.",
       path="/contact/",
       schema_blocks=[schema_localbusiness(), schema_breadcrumb([("Home","/"),("Contact","/contact/")])])
@@ -659,7 +660,7 @@ def build_blog_cards(posts, limit=3):
 def build_blog_index():
     cards = build_blog_cards(BLOG, limit=len(BLOG))
     out = head(
-      title=f"HVAC Tips &amp; Home Comfort Blog | {SITE_NAME}",
+      title=f"HVAC Tips &amp; Home Comfort Blog | {SITE_NAME_T}",
       desc="Practical heating and cooling advice for Waterloo, Ontario homeowners, maintenance schedules, furnace warning signs, humidity tips and more.",
       path="/blog/",
       schema_blocks=[schema_localbusiness(), schema_breadcrumb([("Home","/"),("Blog","/blog/")])])
@@ -806,7 +807,7 @@ def blog_bodies():
 
 # ============================================================ PRIVACY + 404
 def build_privacy():
-    out = head(title=f"Privacy Policy | {SITE_NAME}",
+    out = head(title=f"Privacy Policy | {SITE_NAME_T}",
       desc="Privacy policy for Waterloo Heating & Cooling, how we collect, use, and protect your personal information.",
       path="/privacy-policy/",
       schema_blocks=[schema_breadcrumb([("Home","/"),("Privacy Policy","/privacy-policy/")])])
@@ -844,7 +845,7 @@ def build_privacy():
     write("/privacy-policy/", out)
 
 def build_404():
-    out = head(title=f"Page Not Found | {SITE_NAME}", desc="The page you're looking for could not be found.",
+    out = head(title=f"Page Not Found | {SITE_NAME_T}", desc="The page you're looking for could not be found.",
                path="/404.html", robots="noindex, follow")
     out += f'''
 <section class="page-hero">
